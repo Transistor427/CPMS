@@ -1,0 +1,12 @@
+[Unit]
+Description=CPMS
+After=multi-user.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/CPMS/
+ExecStart=/home/pi/CPMS/env/bin/python /home/pi/CPMS/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
