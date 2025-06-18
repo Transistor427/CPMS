@@ -43,9 +43,10 @@ body {
     line-height: 1.6;
 }
 
+/* Изменено: Положение кнопки для десктопов */
 .theme-toggle {
     position: fixed;
-    top: 20px;
+    bottom: 20px; /* Изменено с top на bottom */
     right: 20px;
     background-color: var(--card-bg);
     color: var(--text-color);
@@ -84,6 +85,33 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
+}
+
+.setup-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.back-button {
+    padding: 10px 15px;
+    background: var(--gray-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+
+.back-button:hover {
+    background: #7a7f85;
+    transform: translateY(-2px);
 }
 
 .form-group {
@@ -341,6 +369,16 @@ button:hover {
 
 /* Для мобильных устройств */
 @media (max-width: 768px) {
+    /* Для мобильных оставляем кнопку вверху справа */
+    .theme-toggle {
+        top: 20px; /* Возвращаем верхнее положение */
+        bottom: auto; /* Отменяем нижнее положение */
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
     .printers-container {
         grid-template-columns: 1fr;
     }
@@ -351,17 +389,18 @@ button:hover {
         gap: 15px;
     }
 
-    .theme-toggle {
-        top: 10px;
-        right: 10px;
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-
     .setup-screen {
         margin: 30px 15px;
         padding: 20px;
+    }
+
+    .setup-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .back-button {
+        align-self: flex-start;
     }
 
     .printer-header {

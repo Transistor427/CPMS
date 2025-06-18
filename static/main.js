@@ -94,12 +94,10 @@ createApp({
             }
         };
 
-        // Исправлено: удаление по IP вместо индекса
         const deletePrinter = async (ip) => {
             if (!confirm("Удалить принтер из списка?")) return;
 
             try {
-                // Находим индекс по IP
                 const index = printers.value.findIndex(p => p.ip === ip);
                 if (index === -1) return;
 
@@ -204,7 +202,6 @@ createApp({
             });
         };
 
-        // Исправлено: все функции управления используют IP вместо индекса
         const emergencyStop = async (ip) => {
             const index = printers.value.findIndex(p => p.ip === ip);
             if (index === -1) return;
