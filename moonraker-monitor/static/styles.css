@@ -1,0 +1,410 @@
+:root {
+    /* Светлая тема */
+    --bg-color: #f5f5f7;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --border-color: #e0e0e0;
+    --primary-color: #4285f4;
+    --success-color: #34a853;
+    --warning-color: #f9ab00;
+    --danger-color: #ea4335;
+    --gray-color: #9aa0a6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --hover-bg: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] {
+    /* Темная тема */
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #e0e0e0;
+    --border-color: #333333;
+    --primary-color: #8ab4f8;
+    --success-color: #81c995;
+    --warning-color: #fdd663;
+    --danger-color: #f28b82;
+    --gray-color: #9aa0a6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --hover-bg: rgba(255, 255, 255, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    z-index: 100;
+    font-size: 1.5rem;
+}
+
+.theme-toggle:hover {
+    background-color: var(--hover-bg);
+}
+
+.setup-screen {
+    max-width: 500px;
+    margin: 50px auto;
+    text-align: center;
+    padding: 30px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.setup-screen h1 {
+    margin-bottom: 25px;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+input[type="text"] {
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    width: 100%;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+button {
+    padding: 14px 20px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header h1 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--primary-color);
+}
+
+.add-button {
+    background: var(--success-color);
+}
+
+.printers-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.printer-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s;
+}
+
+.printer-card:hover {
+    transform: translateY(-5px);
+}
+
+.printer-header {
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--hover-bg);
+}
+
+.printer-header input {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+}
+
+.printer-header input:focus {
+    outline: none;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.delete-button {
+    background: var(--danger-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    width: auto;
+}
+
+.webcam-container {
+    position: relative;
+    height: 250px;
+    background: #000;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.clickable-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.webcam-container:hover .clickable-image {
+    transform: scale(1.05);
+}
+
+.webcam-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.3s;
+}
+
+.webcam-container:hover .webcam-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.printer-info {
+    padding: 20px;
+}
+
+.printer-info div {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status {
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status.operational {
+    color: var(--success-color);
+    background: rgba(52, 168, 83, 0.1);
+}
+
+.status.error {
+    color: var(--danger-color);
+    background: rgba(234, 67, 53, 0.1);
+}
+
+.status.offline {
+    color: var(--gray-color);
+    background: rgba(154, 160, 166, 0.1);
+}
+
+.status.printing {
+    color: var(--primary-color);
+    background: rgba(66, 133, 244, 0.1);
+}
+
+.status.paused {
+    color: var(--warning-color);
+    background: rgba(249, 171, 0, 0.1);
+}
+
+.printer-actions {
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.03);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.action-button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+    text-align: center;
+}
+
+.action-button:hover {
+    opacity: 0.9;
+}
+
+.emergency {
+    background: var(--danger-color);
+    color: white;
+    grid-column: span 2;
+}
+
+.pause-resume {
+    background: var(--warning-color);
+    color: white;
+}
+
+.cancel {
+    background: var(--gray-color);
+    color: white;
+}
+
+.light {
+    background: var(--primary-color);
+    color: white;
+    grid-column: span 2;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    .printers-container {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
+    .setup-screen {
+        margin: 30px 15px;
+        padding: 20px;
+    }
+
+    .printer-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .printer-header input {
+        width: 100%;
+    }
+
+    .delete-button {
+        align-self: flex-end;
+    }
+
+    .printer-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .emergency, .light {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .webcam-container {
+        height: 200px;
+    }
+
+    .printer-info {
+        padding: 15px;
+    }
+
+    .printer-info div {
+        font-size: 14px;
+    }
+
+    .action-button {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}

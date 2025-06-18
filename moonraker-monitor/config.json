@@ -1,0 +1,14 @@
+{
+  "printers": [
+    {
+      "ip": "http://192.168.31.155",
+      "name": "155",
+      "webcam_available": true
+    },
+    {
+      "ip": "http://192.168.31.226",
+      "name": "226",
+      "webcam_available": true
+    }
+  ]
+}

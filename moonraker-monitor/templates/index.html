@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z-Bolt 3D Printer Monitor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    {% raw %}
+    <div id="app">
+        <div class="theme-toggle" @click="toggleTheme">
+            <i :class="themeIcon"></i>
+        </div>
+
+        <div v-if="showSetupScreen" class="setup-screen">
+            <h1><i class="fas fa-print"></i> Добавьте принтер</h1>
+            <div class="form-group">
+                <input type="text" v-model="newPrinterIP" placeholder="IP-адрес принтера">
+                <button @click="addPrinter"><i class="fas fa-plus"></i> Добавить</button>
+            </div>
+        </div>
+
+        <div v-else>
+            <div class="header">
+                <h1><i class="fas fa-print"></i> Мониторинг и управлениe группами 3D принтеров по локальной сети</h1>
+                <button @click="showSetupScreen = true" class="add-button">
+                    <i class="fas fa-plus"></i> Добавить принтер
+                </button>
+            </div>
+
+            <div class="printers-container">
+                <!-- Добавлен ключ по IP для стабильной работы индексов -->
+                <div v-for="(printer, index) in printers" :key="printer.ip" class="printer-card">
+                    <div class="printer-header">
+                        <input v-model="printer.name" @blur="updatePrinter(index)">
+                        <!-- Исправлено: передаем printer.ip вместо index -->
+                        <button @click="deletePrinter(printer.ip)" class="delete-button" title="Удалить принтер">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+
+                    <div class="webcam-container" @click="openPrinterWebUI(printer)">
+                        <img :src="getWebcamImage(printer)"
+                             @error="handleImageError($event, printer, index)"
+                             alt="Webcam"
+                             class="clickable-image">
+                        <div class="webcam-overlay">
+                            <i class="fas fa-external-link-alt"></i> Открыть интерфейс
+                        </div>
+                    </div>
+
+                    <div class="printer-info">
+                        <div class="status" :class="printer.status">
+                            <i :class="statusIcon(printer.status)"></i> {{ printer.statusText }}
+                        </div>
+                        <div><i class="fas fa-fire"></i> Экструдер: {{ printer.extruder_temp }}°C</div>
+
+                        <div v-if="printer.extruder1_temp !== '-'">
+                            <i class="fas fa-fire"></i> Экструдер 1: {{ printer.extruder1_temp }}°C
+                        </div>
+
+                        <div><i class="fas fa-bed"></i> Стол: {{ printer.bed_temp }}°C</div>
+                        <div><i class="fas fa-temperature-low"></i> Камера: {{ printer.chamber_temp }}°C</div>
+                        <div><i class="fas fa-file"></i> Файл: {{ printer.filename }}</div>
+                    </div>
+
+                    <div class="printer-actions">
+                        <!-- Исправлено: передаем printer.ip вместо index -->
+                        <button @click="emergencyStop(printer.ip)" class="action-button emergency">
+                            <i class="fas fa-stop-circle"></i> АВАРИЙНАЯ ОСТАНОВКА
+                        </button>
+
+                        <button
+                            v-if="printer.status === 'printing' || printer.status === 'paused'"
+                            @click="pauseResumePrint(printer.ip)"
+                            class="action-button pause-resume"
+                        >
+                            <i :class="printer.status === 'paused' ? 'fas fa-play' : 'fas fa-pause'"></i>
+                            {{ printer.status === 'paused' ? 'Продолжить' : 'Пауза' }}
+                        </button>
+
+                        <button
+                            v-if="printer.status === 'printing' || printer.status === 'paused'"
+                            @click="cancelPrint(printer.ip)"
+                            class="action-button cancel"
+                        >
+                            <i class="fas fa-ban"></i> Отменить печать
+                        </button>
+
+                        <button @click="toggleLight(printer.ip)" class="action-button light">
+                            <i class="fas fa-lightbulb"></i> Вкл/Выкл подсветки
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endraw %}
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
