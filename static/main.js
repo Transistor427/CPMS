@@ -49,7 +49,8 @@ createApp({
                 chamber_temp: printer.chamber_temp || '-',
                 filename: printer.filename || 'Нет данных',
                 filename_without_ext: printer.filename_without_ext || '',
-                webcam_available: printer.webcam_available ?? true
+                webcam_available: printer.webcam_available ?? true,
+                remaining_time: printer.remaining_time || null  // Новое поле
             };
         };
 
@@ -126,7 +127,7 @@ createApp({
             }
 
             if ((printer.status === 'printing' || printer.status === 'paused') && printer.filename_without_ext) {
-                return `${printer.ip}/server/files/gcodes/.thumbs/${printer.filename_without_ext}-300x300.png?t=${Date.now()}`;
+                return `${printer.ip}/server/files/gcodes/.thumbs/${printer.filename_without_ext}-300x300.png`;
             }
 
             return '/static/default_printer.jpg';
@@ -137,7 +138,7 @@ createApp({
                 printers.value[index].webcam_available = false;
 
                 if ((printer.status === 'printing' || printer.status === 'paused') && printer.filename_without_ext) {
-                    event.target.src = `${printer.ip}/server/files/gcodes/.thumbs/${printer.filename_without_ext}-300x300.png?t=${Date.now()}`;
+                    event.target.src = `${printer.ip}/server/files/gcodes/.thumbs/${printer.filename_without_ext}-300x300.png`;
                     return;
                 }
             }
@@ -161,7 +162,8 @@ createApp({
                         chamber_temp: "-",
                         filename: "Нет данных",
                         filename_without_ext: "",
-                        webcam_available: false
+                        webcam_available: false,
+                        remaining_time: null  // Сбрасываем время
                     };
                     return;
                 }
@@ -174,11 +176,13 @@ createApp({
                     bed_temp: data.bed_temp ? Math.round(data.bed_temp) : '-',
                     chamber_temp: data.chamber_temp ? Math.round(data.chamber_temp) : '-',
                     filename: data.filename || 'Нет данных',
-                    filename_without_ext: data.filename_without_ext || ''
+                    filename_without_ext: data.filename_without_ext || '',
+                    remaining_time: data.remaining_time  // Сохраняем время
                 };
             } catch (e) {
                 printers.value[index].status = 'error';
                 printers.value[index].statusText = 'Ошибка соединения';
+                printers.value[index].remaining_time = null;  // Сбрасываем время при ошибке
             }
         };
 

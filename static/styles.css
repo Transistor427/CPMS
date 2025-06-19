@@ -43,10 +43,9 @@ body {
     line-height: 1.6;
 }
 
-/* Изменено: Положение кнопки для десктопов */
 .theme-toggle {
     position: fixed;
-    bottom: 20px; /* Изменено с top на bottom */
+    bottom: 20px;
     right: 20px;
     background-color: var(--card-bg);
     color: var(--text-color);
@@ -318,6 +317,19 @@ button:hover {
     background: rgba(249, 171, 0, 0.1);
 }
 
+/* Стиль для времени печати */
+.time-remaining {
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(66, 133, 244, 0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .printer-actions {
     padding: 15px;
     border-top: 1px solid var(--border-color);
@@ -369,10 +381,9 @@ button:hover {
 
 /* Для мобильных устройств */
 @media (max-width: 768px) {
-    /* Для мобильных оставляем кнопку вверху справа */
     .theme-toggle {
-        top: 20px; /* Возвращаем верхнее положение */
-        bottom: auto; /* Отменяем нижнее положение */
+        top: 20px;
+        bottom: auto;
         right: 20px;
         width: 40px;
         height: 40px;

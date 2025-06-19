@@ -3,6 +3,9 @@ import json
 import requests
 from flask import Flask, render_template, request, jsonify, send_from_directory
 import re
+import threading
+import webbrowser
+import time
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -27,6 +30,12 @@ def save_config(config):
     except Exception as e:
         print(f"Ошибка сохранения конфигурации: {e}")
         return False
+
+
+def open_browser():
+    """Открывает браузер с адресом приложения после небольшой задержки"""
+    time.sleep(1)  # Даем серверу время запуститься
+    webbrowser.open_new('http://127.0.0.1:5000')
 
 
 @app.route('/')
@@ -113,12 +122,29 @@ def printer_status(printer_id):
         # Получение данных о температурах
         temps = {}
         chamber_temp = 0
+        remaining_time = None  # Новое поле: оставшееся время
 
         try:
-            # Запрашиваем extruder, exgtruder1 и heater_bed
-            response = requests.get(f"{base_url}/printer/objects/query?extruder&extruder1&heater_bed", timeout=2)
+            # Запрашиваем extruder, extruder1, heater_bed и virtual_sdcard для времени печати
+            response = requests.get(
+                f"{base_url}/printer/objects/query?extruder&extruder1&heater_bed&virtual_sdcard&print_stats",
+                timeout=2
+            )
             data = response.json()
             temps = data.get('result', {}).get('status', {})
+            v_sdcard = temps.get('virtual_sdcard', {})
+            p_stats = temps.get('print_stats', {})
+
+            # Получаем оставшееся время печати
+            if v_sdcard.get('is_active', False):
+                progress = v_sdcard.get('progress', 0)
+                print_duration = p_stats.get('print_duration', 0)
+
+                if progress > 0 and print_duration > 0:
+                    total_time = print_duration / progress
+                    remaining_time = max(0, total_time - print_duration)
+                    # Конвертируем в минуты и округляем
+                    remaining_time = int(remaining_time / 60)
 
             # Отдельный запрос для получения доступных сенсоров
             response = requests.get(f"{base_url}/printer/objects/query?heaters", timeout=2)
@@ -140,7 +166,7 @@ def printer_status(printer_id):
                 chamber_temp = sensor_data.get('result', {}).get('status', {}).get(chamber_sensor_name, {}).get(
                     'temperature', {})
         except Exception as e:
-            print(f"Ошибка получения температуры камеры: {e}")
+            print(f"Ошибка получения данных: {e}")
             pass
 
         # Получение статуса печати
@@ -176,7 +202,8 @@ def printer_status(printer_id):
             "filename_without_ext": filename_without_ext,
             "status": printer_state,
             "statusText": status_map.get(printer_state, printer_state.capitalize()),
-            "webcam_available": True
+            "webcam_available": True,
+            "remaining_time": remaining_time  # Новое поле
         })
     except Exception as e:
         return jsonify(error=str(e)), 500
@@ -317,4 +344,8 @@ if __name__ == '__main__':
         with open(CONFIG_FILE, 'w') as f:
             json.dump({"printers": []}, f)
 
+    # Запускаем открытие браузера в отдельном потоке
+    # threading.Thread(target=open_browser).start()
+
+    # Запускаем сервер
     app.run(host='0.0.0.0', port=5000, debug=True)

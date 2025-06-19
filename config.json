@@ -1,3 +1,14 @@
 {
-  "printers": []
+  "printers": [
+    {
+      "ip": "http://192.168.31.226",
+      "name": "Printer 1",
+      "webcam_available": true
+    },
+    {
+      "ip": "http://192.168.31.74",
+      "name": "S400 - \u0421\u0435\u0440\u0432\u0438\u043e\u043d\u0438\u043a\u0430",
+      "webcam_available": true
+    }
+  ]
 }

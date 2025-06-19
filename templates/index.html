@@ -60,9 +60,15 @@
                         <div class="status" :class="printer.status">
                             <i :class="statusIcon(printer.status)"></i> {{ printer.statusText }}
                         </div>
+
+                        <!-- Новое поле: оставшееся время -->
+                        <div v-if="printer.status === 'printing'" class="time-remaining">
+                            <i class="fas fa-hourglass-half"></i> Осталось: {{ printer.remaining_time }} мин
+                        </div>
+
                         <div><i class="fas fa-fire"></i> Экструдер: {{ printer.extruder_temp }}°C</div>
 
-                        <div v-if="printer.extruder1_temp !== '-' && printer.extruder1_temp > 0">
+                        <div v-if="printer.extruder1_temp !== '-'">
                             <i class="fas fa-fire"></i> Экструдер 1: {{ printer.extruder1_temp }}°C
                         </div>
 
